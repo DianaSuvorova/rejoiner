@@ -150,6 +150,23 @@ task streamingGraphQlServer(type: CreateStartScripts) {
   classpath = jar.outputs.files + project.configurations.runtime
 }
 
+// ------------------
+// ToDo Examples
+
+task todoGraphqlServer(type: CreateStartScripts) {
+  mainClassName = 'com.google.api.graphql.examples.todo.graphqlserver.GraphQlServer'
+  applicationName = 'todo-graphqlserver'
+  outputDir = new File(project.buildDir, 'tmp')
+  classpath = jar.outputs.files + project.configurations.runtime
+}
+
+task tododBackend(type: CreateStartScripts) {
+  mainClassName = 'com.google.api.graphql.examples.todo.backend.ToDoServer'
+  applicationName = 'todo-backend'
+  outputDir = new File(project.buildDir, 'tmp')
+  classpath = jar.outputs.files + project.configurations.runtime
+}
+
 applicationDistribution.into('bin') {
   from(helloworldGraphqlServer)
   from(helloworldBackend)
@@ -159,5 +176,7 @@ applicationDistribution.into('bin') {
   from(streamingBackend)
   from(streamingGraphQlClient)
   from(streamingGraphQlServer)
+  from(todoGraphqlServer)
+  from(tododBackend)
   fileMode = 0755
 }
