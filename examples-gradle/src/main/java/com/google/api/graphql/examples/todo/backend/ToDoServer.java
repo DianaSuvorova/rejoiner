@@ -2,14 +2,14 @@ package com.google.api.graphql.examples.todo.backend;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import io.grpc.examples.helloworld.GreeterGrpc;
-import io.grpc.examples.helloworld.HelloReply;
-import io.grpc.examples.helloworld.HelloRequest;
+import io.grpc.examples.todo.ToDo;
+import io.grpc.examples.todo.TodoGrpc;
+import io.grpc.examples.todo.AddToDoResponse;
+import io.grpc.examples.todo.AddToDoRequest;
 import io.grpc.stub.StreamObserver;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-/** Server that manages startup/shutdown of a {@code Greeter} server. */
 public class ToDoServer {
     private static final Logger logger = Logger.getLogger(ToDoServer.class.getName());
 
@@ -18,7 +18,7 @@ public class ToDoServer {
     private void start() throws IOException {
         /* The port on which the server should run */
         int port = 50051;
-        server = ServerBuilder.forPort(port).addService(new GreeterImpl()).build().start();
+        server = ServerBuilder.forPort(port).addService(new TodoImpl()).build().start();
         logger.info("Server started, listening on " + port);
         Runtime.getRuntime()
                 .addShutdownHook(
@@ -53,12 +53,13 @@ public class ToDoServer {
         server.blockUntilShutdown();
     }
 
-    static class GreeterImpl extends GreeterGrpc.GreeterImplBase {
+    static class TodoImpl extends TodoGrpc.TodoImplBase {
 
         @Override
-        public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
-            HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
-            responseObserver.onNext(reply);
+        public void addToDo(AddToDoRequest req, StreamObserver<AddToDoResponse> responseObserver) {
+            ToDo todo = ToDo.newBuilder().setText("Task: " + req.getText()).setId("1").build();
+            AddToDoResponse todoResponse = AddToDoResponse.newBuilder().setToDo(todo).build();
+            responseObserver.onNext(todoResponse);
             responseObserver.onCompleted();
         }
     }

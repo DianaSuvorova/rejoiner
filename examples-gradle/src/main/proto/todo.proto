@@ -12,18 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.google.api.graphql.examples.todo.graphqlserver;
+syntax = "proto3";
 
-import com.google.api.graphql.rejoiner.Query;
-import com.google.api.graphql.rejoiner.SchemaModule;
-import io.grpc.examples.todo.TodoGrpc;
-import io.grpc.examples.todo.AddToDoResponse;
-import io.grpc.examples.todo.AddToDoRequest;
+option java_multiple_files = true;
+option java_package = "io.grpc.examples.todo";
+option java_outer_classname = "ToDoProto";
 
-/** A GraphQL {@link SchemaModule} backed by a gRPC service. */
-final class ToDoSchemaModule extends SchemaModule {
-  @Query("addToDo")
-  AddToDoResponse sayHello(AddToDoRequest request, TodoGrpc.TodoBlockingStub client) {
-    return client.addToDo(request);
-  }
+package todo;
+
+// The greeting service definition.
+service Todo {
+    // Sends a greeting
+    rpc addToDo (AddToDoRequest) returns (AddToDoResponse) {}
+}
+
+// The request message containing the user's name.
+message AddToDoRequest {
+    string userId = 1;
+    string text = 2;
+}
+
+// The response message containing the greetings
+message AddToDoResponse {
+    ToDo toDo = 1;
+}
+
+message ToDo {
+    string id = 1;
+    string text = 2;
 }

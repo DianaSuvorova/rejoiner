@@ -17,9 +17,9 @@ package com.google.api.graphql.examples.todo.graphqlserver;
 import com.google.inject.AbstractModule;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.grpc.examples.helloworld.GreeterGrpc;
+import io.grpc.examples.todo.TodoGrpc;
 
-/** Binds a stub for the {@link GreeterGrpc} service. */
+/** Binds a stub for the {@link TodoGrpc} service. */
 final class ToDoClientModule extends AbstractModule {
 
   private static final String HOST = "localhost";
@@ -28,6 +28,6 @@ final class ToDoClientModule extends AbstractModule {
   @Override
   protected void configure() {
     ManagedChannel channel = ManagedChannelBuilder.forAddress(HOST, PORT).usePlaintext().build();
-    bind(GreeterGrpc.GreeterBlockingStub.class).toInstance(GreeterGrpc.newBlockingStub(channel));
+    bind(TodoGrpc.TodoBlockingStub.class).toInstance(TodoGrpc.newBlockingStub(channel));
   }
 }
