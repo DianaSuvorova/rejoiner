@@ -15,7 +15,9 @@
 package com.google.api.graphql.examples.todo.graphqlserver;
 
 import com.google.api.graphql.rejoiner.Query;
+import com.google.api.graphql.rejoiner.RelayNode;
 import com.google.api.graphql.rejoiner.SchemaModule;
+import io.grpc.examples.todo.GetToDoRequest;
 import io.grpc.examples.todo.TodoGrpc;
 import io.grpc.examples.todo.AddToDoResponse;
 import io.grpc.examples.todo.AddToDoRequest;
@@ -23,7 +25,13 @@ import io.grpc.examples.todo.AddToDoRequest;
 /** A GraphQL {@link SchemaModule} backed by a gRPC service. */
 final class ToDoSchemaModule extends SchemaModule {
   @Query("addToDo")
-  AddToDoResponse sayHello(AddToDoRequest request, TodoGrpc.TodoBlockingStub client) {
+  AddToDoResponse addTodo(AddToDoRequest request, TodoGrpc.TodoBlockingStub client) {
     return client.addToDo(request);
   }
+
+  @RelayNode @Query("getToDo")
+  AddToDoResponse getToDo(GetToDoRequest request, TodoGrpc.TodoBlockingStub client) {
+    return client.getToDo(request);
+  }
+  
 }

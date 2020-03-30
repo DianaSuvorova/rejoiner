@@ -20,21 +20,23 @@ option java_outer_classname = "ToDoProto";
 
 package todo;
 
-// The greeting service definition.
 service Todo {
     // Sends a greeting
     rpc addToDo (AddToDoRequest) returns (AddToDoResponse) {}
+    rpc getToDo (GetToDoRequest) returns (AddToDoResponse) {}
 }
 
-// The request message containing the user's name.
 message AddToDoRequest {
     string userId = 1;
     string text = 2;
 }
 
-// The response message containing the greetings
 message AddToDoResponse {
     ToDo toDo = 1;
+}
+
+message GetToDoRequest {
+    string id = 1;
 }
 
 message ToDo {

@@ -6,9 +6,13 @@ import io.grpc.examples.todo.ToDo;
 import io.grpc.examples.todo.TodoGrpc;
 import io.grpc.examples.todo.AddToDoResponse;
 import io.grpc.examples.todo.AddToDoRequest;
+import io.grpc.examples.todo.GetToDoRequest;
 import io.grpc.stub.StreamObserver;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Logger;
+import java.util.UUID;
+import java.util.Map;
 
 public class ToDoServer {
     private static final Logger logger = Logger.getLogger(ToDoServer.class.getName());
@@ -54,13 +58,25 @@ public class ToDoServer {
     }
 
     static class TodoImpl extends TodoGrpc.TodoImplBase {
+        HashMap<String, ToDo> todos= new HashMap<String, ToDo>();
 
         @Override
         public void addToDo(AddToDoRequest req, StreamObserver<AddToDoResponse> responseObserver) {
-            ToDo todo = ToDo.newBuilder().setText("Task: " + req.getText()).setId("1").build();
+            String uuid = UUID.randomUUID().toString();
+            ToDo todo = ToDo.newBuilder().setText("Task: " + req.getText()).setId(uuid).build();
+            todos.put(uuid, todo);
             AddToDoResponse todoResponse = AddToDoResponse.newBuilder().setToDo(todo).build();
             responseObserver.onNext(todoResponse);
             responseObserver.onCompleted();
+        }
+
+        @Override
+        public void getToDo(GetToDoRequest req, StreamObserver<AddToDoResponse> responseObserver) {
+            ToDo todo = todos.get(req.getId());
+            AddToDoResponse todoResponse = AddToDoResponse.newBuilder().setToDo(todo).build();
+            responseObserver.onNext(todoResponse);
+            responseObserver.onCompleted();
+
         }
     }
 }
